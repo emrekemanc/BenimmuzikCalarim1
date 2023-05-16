@@ -1,12 +1,9 @@
 package com.example.yeni.view
 
-
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
@@ -19,12 +16,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.room.Room
-import com.example.yeni.BuildConfig
 import com.example.yeni.R
 import com.example.yeni.adapter.UserDao
+import com.example.yeni.adapter.izinler
 import com.example.yeni.database.AppDatabase
 import com.example.yeni.databinding.ActivityMain2Binding
 import com.example.yeni.model.User
@@ -33,8 +28,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
-import java.io.File
-
 
 class MainActivity2 : AppCompatActivity() {
 
@@ -61,48 +54,12 @@ private lateinit var binding: ActivityMain2Binding
         yeniMuzik()
         room()
 
-
     }
 
 
 
     fun resimekle(view: View){
-        if (Build.VERSION.SDK_INT>=VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this@MainActivity2, android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity2, android.Manifest.permission.READ_MEDIA_IMAGES)) {
-                    Snackbar.make(view, "izin lazım", Snackbar.LENGTH_LONG).setAction("ver") {
-                        permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-
-                    }.show()
-                } else {
-                    permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-
-                }
-
-            } else {
-                val intentToGalary = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher.launch(intentToGalary)
-            }
-        }else{
-            if (ContextCompat.checkSelfPermission(this@MainActivity2, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity2, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    Snackbar.make(view, "izin lazım", Snackbar.LENGTH_LONG).setAction("ver") {
-                        permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-
-                    }.show()
-                } else {
-                    permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-
-                }
-
-            } else {
-                val intentToGalary = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher.launch(intentToGalary)
-            }
-
-        }
-
-
+       izinler(this,this,permissionLauncher,activityResultLauncher,view,1).izin()
 
 
     }
@@ -146,42 +103,8 @@ private lateinit var binding: ActivityMain2Binding
     }
 
     fun muzikEkle(view: View){
-        if (Build.VERSION.SDK_INT>=VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this@MainActivity2, android.Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity2, android.Manifest.permission.READ_MEDIA_AUDIO)) {
-                    Snackbar.make(view, "izin lazım", Snackbar.LENGTH_LONG).setAction("ver") {
-                        permissionLauncher2.launch(android.Manifest.permission.READ_MEDIA_AUDIO)
-
-                    }.show()
-                } else {
-                    permissionLauncher2.launch(android.Manifest.permission.READ_MEDIA_AUDIO)
-
-                }
-
-            } else {
-                val intentToGalary = Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher2.launch(intentToGalary)
-            }
-        }else {
-            if (ContextCompat.checkSelfPermission(this@MainActivity2, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity2, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                ) {
-                    Snackbar.make(view, "izin lazım", Snackbar.LENGTH_LONG).setAction("ver") {
-                        permissionLauncher2.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-
-                    }.show()
-                } else {
-                    permissionLauncher2.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-
-                }
-
-            } else {
-                val intentToGalary =
-                    Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher2.launch(intentToGalary)
-            }
-        }
-        }
+        izinler(this,this,permissionLauncher2,activityResultLauncher2,view,0).izin()
+    }
     fun yeniMuzik(){
         activityResultLauncher2=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
             if (result.resultCode== RESULT_OK){
@@ -211,6 +134,7 @@ private lateinit var binding: ActivityMain2Binding
             }
         }
     }
+
     fun getRealPathFromURI(uri: Uri): String {
         val projection = arrayOf(MediaStore.Audio.Media.DATA)
         val cursor = contentResolver.query(uri, projection, null, null, null)
