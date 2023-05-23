@@ -20,4 +20,7 @@ interface UserDao {
 
      @Delete
      fun delete(user: User):Completable
+     @Query("DELETE FROM User WHERE id In (:ids)")
+     fun sil(vararg ids:Int):Completable
+
 }

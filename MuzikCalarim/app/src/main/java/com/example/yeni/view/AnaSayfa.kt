@@ -2,43 +2,38 @@ package com.example.yeni.view
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.MediaPlayer
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.yeni.R
 import com.example.yeni.adapter.RecyclerViewAdapter
 import com.example.yeni.adapter.UserDao
 import com.example.yeni.adapter.geriİleri
-import com.example.yeni.adapter.seekBar
 import com.example.yeni.database.AppDatabase
-import com.example.yeni.databinding.ActivityMainBinding
+import com.example.yeni.databinding.ActivityAnaSayfaBinding
 import com.example.yeni.model.User
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.io.File
 
 
 @SuppressLint("StaticFieldLeak")
-private lateinit var binding: ActivityMainBinding
+private lateinit var binding: ActivityAnaSayfaBinding
 lateinit var db:AppDatabase
 lateinit var userDao:UserDao
 lateinit var play:MediaPlayer
 lateinit var lis:List<User>
+lateinit var userr: User
 var composite=CompositeDisposable()
 var a=true
-var numara:Int=1
+var numara:Int=0
+
 
 
 
@@ -46,8 +41,8 @@ var numara:Int=1
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        binding=ActivityMainBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_ana_sayfa)
+        binding=ActivityAnaSayfaBinding.inflate(layoutInflater)
         val view=binding.root
         setContentView(view)
         play= MediaPlayer.create(this,R.raw.bip)
@@ -64,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun handeler(liste:List<User>){
         binding.RecyclerView.layoutManager=LinearLayoutManager(this)
-        val adapter=RecyclerViewAdapter(liste, binding,this )
+        val adapter= RecyclerViewAdapter(liste, binding,this )
         binding.RecyclerView.adapter=adapter
         lis= liste
 
@@ -78,12 +73,14 @@ class MainActivity : AppCompatActivity() {
 
         return when(item.itemId){
             R.id.menu1->{
-                val intent=Intent(this,MainActivity2::class.java)
+                play.stop()
+                val intent=Intent(this,KayitEklemeEkrani::class.java)
 
                 startActivity(intent)
 
                 true
             }else-> super.onOptionsItemSelected(item)
+
         }
 
     }
@@ -100,22 +97,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun ileri(view: View){
-        if (numara<lis.size){
+        if (numara<lis.size-1){
             numara++
         }
-       else if (numara== lis.size){
-            numara=1
+       else if (numara== lis.size-1){
+            numara=0
         }
         geriİleri(this, binding).geriileri()
+
     }
     fun geri(view: View){
-        if (numara>1){
+        if (numara>0){
             numara--
-        }else if (numara==1){
-            numara= lis.size
+        }else if (numara==0){
+            numara= lis.size-1
         }
         geriİleri(this, binding).geriileri()
+
     }
+
 
 
     fun room(){

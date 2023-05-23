@@ -4,23 +4,23 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.widget.SeekBar
-import com.example.yeni.databinding.ActivityMainBinding
+import com.example.yeni.databinding.ActivityAnaSayfaBinding
 import com.example.yeni.view.*
 
 var runnable : Runnable = Runnable {  }
 var handler = Handler(Looper.myLooper()!!)
 
 
-class seekBar(val binding: ActivityMainBinding,val context: Context) {
+class seekBar(val binding: ActivityAnaSayfaBinding,val context: Context) {
     fun sekbar(){
         runnable=object :Runnable{
             override fun run() {
                 if (play.currentPosition>= play.duration-200){
-                    if (numara<lis.size){
+                    if (numara<lis.size-1){
                         numara++
                     }
-                    else if (numara== lis.size){
-                        numara=1
+                    else if (numara== lis.size-1){
+                        numara=0
                     }
                     geriİleri(context,binding).geriileri()
                    handler.removeCallbacks(runnable)

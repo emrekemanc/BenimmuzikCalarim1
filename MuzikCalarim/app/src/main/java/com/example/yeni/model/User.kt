@@ -3,6 +3,7 @@ package com.example.yeni.model
 import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.sql.Blob
 
@@ -15,4 +16,5 @@ data class User (
     ){
     @PrimaryKey(true)
     var id=0
+
 }

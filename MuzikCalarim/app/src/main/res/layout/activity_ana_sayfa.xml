@@ -62,24 +62,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:contentDescription="@string/app_name"
                 android:onClick="geri"
-                android:src="@drawable/geri" />
+                android:src="@drawable/geri"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/baslatDurdur"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:contentDescription="@string/app_name"
                 android:onClick="baslatDurdur"
-                android:src="@drawable/durdur" />
+                android:src="@drawable/durdur"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView
                 android:id="@+id/ileri"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:contentDescription="@string/app_name"
                 android:onClick="ileri"
-                android:src="@drawable/ileri" />
+                android:src="@drawable/ileri"
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
     </LinearLayout>
 

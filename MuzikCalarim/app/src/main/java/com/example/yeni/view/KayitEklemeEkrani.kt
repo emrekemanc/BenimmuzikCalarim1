@@ -1,12 +1,10 @@
 package com.example.yeni.view
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.os.Build.VERSION_CODES
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,22 +12,19 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.room.Room
 import com.example.yeni.R
 import com.example.yeni.adapter.UserDao
 import com.example.yeni.adapter.izinler
 import com.example.yeni.database.AppDatabase
-import com.example.yeni.databinding.ActivityMain2Binding
+import com.example.yeni.databinding.ActivityKayitEklemeEkraniBinding
 import com.example.yeni.model.User
-import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
 
-class MainActivity2 : AppCompatActivity() {
+class KayitEklemeEkrani : AppCompatActivity() {
 
 private lateinit var db:AppDatabase
 private lateinit var userDao:UserDao
@@ -37,7 +32,7 @@ private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 private lateinit var permissionLauncher: ActivityResultLauncher<String>
 private lateinit var activityResultLauncher2 :ActivityResultLauncher<Intent>
 private lateinit var permissionLauncher2: ActivityResultLauncher<String>
-private lateinit var binding: ActivityMain2Binding
+private lateinit var binding: ActivityKayitEklemeEkraniBinding
     var bitmap:Bitmap?=null
     var filePath:String?=null
     val compositeDisposable= CompositeDisposable()
@@ -46,8 +41,8 @@ private lateinit var binding: ActivityMain2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
-        binding= ActivityMain2Binding.inflate(layoutInflater)
+        setContentView(R.layout.activity_kayit_ekleme_ekrani)
+        binding= ActivityKayitEklemeEkraniBinding.inflate(layoutInflater)
         val view =binding.root
         setContentView(view)
         yeniResim()
@@ -60,8 +55,6 @@ private lateinit var binding: ActivityMain2Binding
 
     fun resimekle(view: View){
        izinler(this,this,permissionLauncher,activityResultLauncher,view,1).izin()
-
-
     }
     fun yeniResim(){
         activityResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
@@ -73,7 +66,7 @@ private lateinit var binding: ActivityMain2Binding
                         try {
 
                             if (Build.VERSION.SDK_INT>=28){
-                                val source=ImageDecoder.createSource(this@MainActivity2.contentResolver,imageData)
+                                val source=ImageDecoder.createSource(this@KayitEklemeEkrani.contentResolver,imageData)
                                 bitmap=ImageDecoder.decodeBitmap(source)
                                 binding.imageView.setImageBitmap(bitmap)
 
@@ -96,7 +89,7 @@ private lateinit var binding: ActivityMain2Binding
 
             }
             else{
-                Toast.makeText(this@MainActivity2,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@KayitEklemeEkrani,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
 
             }
         }
@@ -129,7 +122,7 @@ private lateinit var binding: ActivityMain2Binding
 
             }
             else{
-                Toast.makeText(this@MainActivity2,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@KayitEklemeEkrani,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
             println(result)
             }
         }
@@ -147,7 +140,6 @@ private lateinit var binding: ActivityMain2Binding
     fun kaydet(view:View){
 
         val kucukresim=resimküçüt(bitmap!!,400)
-
         val outputStream= ByteArrayOutputStream()
         kucukresim.compress(Bitmap.CompressFormat.PNG,50,outputStream)
         val byteArray=outputStream.toByteArray()

@@ -5,18 +5,23 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.net.Uri
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yeni.R
-import com.example.yeni.databinding.ActivityMainBinding
+import com.example.yeni.databinding.ActivityAnaSayfaBinding
 import com.example.yeni.databinding.RecyclerViewBinding
 import com.example.yeni.model.User
 import com.example.yeni.view.*
+import com.google.android.material.snackbar.Snackbar
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.File
 
-class RecyclerViewAdapter(val itemler: List<User>, val binding: ActivityMainBinding, val context: Context, ): RecyclerView.Adapter<RecyclerViewAdapter.itemHolder>() {
+class RecyclerViewAdapter(val itemler: List<User>, val binding: ActivityAnaSayfaBinding, val context: Context ): RecyclerView.Adapter<RecyclerViewAdapter.itemHolder>() {
 
     class itemHolder(val binding: RecyclerViewBinding):RecyclerView.ViewHolder(binding.root){
 
@@ -28,7 +33,6 @@ class RecyclerViewAdapter(val itemler: List<User>, val binding: ActivityMainBind
     }
 
     override fun getItemCount(): Int {
-        println(itemler.size)
         return itemler.size
     }
 
@@ -36,21 +40,32 @@ class RecyclerViewAdapter(val itemler: List<User>, val binding: ActivityMainBind
         holder.binding.item.text=itemler.get(position).muzikAdi
         holder.itemView.setOnClickListener {
             play.stop()
-            numara=position+1
-            binding.muzikGornum.visibility= View.VISIBLE
-            binding.muzikAdi.text=itemler.get(position).muzikAdi
-            val byta=itemler.get(position).muzikGorsel
-            val bitmap=BitmapFactory.decodeByteArray(byta,0,byta.size)
-            binding.muzikGorsel.setImageBitmap(bitmap)
-            val file=File(itemler.get(position).muzik)
-            val uri=Uri.fromFile(file)
-            play=MediaPlayer.create(context,uri)
-            play.start()
-            binding.baslatDurdur.setImageResource(R.drawable.durdur)
-            a=true
-            seekBar(binding,context).sekbar()
-            seekBar(binding,context).seekbar()
+            numara=position
+            geriİleri(context,binding).geriİleri(itemler.get(numara))
+            binding.muzikGornum.visibility=View.VISIBLE
         }
+        holder.itemView.setOnLongClickListener{
+            Snackbar.make(it,"Silmek istediğiniz şarkı "+itemler.get(position).muzikAdi, Snackbar.LENGTH_LONG).setAction("Sil"){
+                Toast.makeText(context,itemler.get(position).muzikAdi+" silindi", Toast.LENGTH_LONG).show()
+              if (play.isPlaying ){  if (numara<lis.size-1){
+                    numara
+                }
+                else if (numara== lis.size-1){
+                    numara=0
+                }
+                geriİleri(context,binding).geriileri()}
+                composite.add(userDao.sil(lis[position].id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe())
+
+            }.show()
+
+
+            return@setOnLongClickListener true
+        }
+
+
     }
 
 
