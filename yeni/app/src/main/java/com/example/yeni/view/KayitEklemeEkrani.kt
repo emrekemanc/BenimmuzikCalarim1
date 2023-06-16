@@ -66,36 +66,21 @@ private lateinit var binding: ActivityKayitEklemeEkraniBinding
                     val imageData=intentFromResult.data
                     if (imageData!=null){
                         try {
-
                             if (Build.VERSION.SDK_INT>=28){
                                 val source=ImageDecoder.createSource(this@KayitEklemeEkrani.contentResolver,imageData)
                                 bitmap=ImageDecoder.decodeBitmap(source)
                                 binding.imageView.setImageBitmap(bitmap)
-
                             }else{
                                 bitmap=MediaStore.Images.Media.getBitmap(contentResolver,imageData)
                                 binding.imageView.setImageBitmap(bitmap)
                             }
-                        }catch (_:Exception){
-
-                        }}
-
-                }
-            }
-
-        }
+                        }catch (_:Exception){ }} } } }
         permissionLauncher=registerForActivityResult(ActivityResultContracts.RequestPermission()){result->
             if (result){
                 val intentToGalary=Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher.launch(intentToGalary)
-
-            }
+                activityResultLauncher.launch(intentToGalary) }
             else{
-                Toast.makeText(this@KayitEklemeEkrani,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
-
-            }
-        }
-    }
+                Toast.makeText(this@KayitEklemeEkrani,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show() } } }
 
     fun muzikEkle(view: View){
         izinler(this,this,permissionLauncher2,activityResultLauncher2,view,0).izin()
@@ -108,15 +93,8 @@ private lateinit var binding: ActivityKayitEklemeEkraniBinding
                     val imageData=intentFromResult.data
                     if (imageData!=null){
                         filePath= getRealPathFromURI(imageData)
-                        binding.textView.text=filePath
-
-                    }
-                }
-
-            }
-
+                        binding.textView.text=filePath } } }
         }
-
         permissionLauncher2=registerForActivityResult(ActivityResultContracts.RequestPermission()){result->
             if (result){
                 val intentToAudio=Intent(Intent.ACTION_PICK,MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
@@ -125,10 +103,7 @@ private lateinit var binding: ActivityKayitEklemeEkraniBinding
             }
             else{
                 Toast.makeText(this@KayitEklemeEkrani,"izin vermen lazım yoksa olmaz",Toast.LENGTH_LONG).show()
-            println(result)
-            }
-        }
-    }
+            println(result) } } }
 
     @SuppressLint("Recycle")
     fun getRealPathFromURI(uri: Uri): String {

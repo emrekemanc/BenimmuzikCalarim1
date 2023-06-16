@@ -12,7 +12,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 lateinit var intentToGalary:Intent
-class izinler (val context: Context,val activity: Activity,val permissionLauncher: ActivityResultLauncher<String>,val activityResultLauncher2 :ActivityResultLauncher<Intent>,val view: View,val izinTürü:Int){
+class izinler (val context: Context,val activity: Activity,val permissionLauncher: ActivityResultLauncher<String>,
+               val activityResultLauncher2 :ActivityResultLauncher<Intent>,val view: View,val izinTürü:Int){
     fun izin(){
 
         if (izinTürü==0){
